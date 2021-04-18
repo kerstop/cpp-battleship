@@ -106,6 +106,14 @@ int Game::getNumberOfGuesses(){
     return numberOfGuesses;
 }
 
+int Game::getBoardHeight(){
+    return boardHeight;
+}
+
+int Game::getBoardWidth(){
+    return boardWidth;
+}
+
 int Game::makeGuess(int x, int y){
     numberOfGuesses--;
     int *tile = &board[x-1][y-1];

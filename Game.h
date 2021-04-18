@@ -22,6 +22,8 @@ namespace Battleship{
 
         int getNumberOfGuesses();
         int getNumberOfShips();
+        int getBoardWidth();
+        int getBoardHeight();
 
         void printBoard();
         void placeShips(int n);
