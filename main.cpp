@@ -30,7 +30,7 @@ int main () {
                 std::cout << "x cordinate: ";
                 std::cin >> xCord;
                 if (xCord <= 0 || xCord > game.getBoardWidth()){
-                    std::cout << "Bad x cordinate, please re-enter.";
+                    std::cout << "Bad x cordinate, please re-enter.\n";
                 }
             }
 
@@ -39,7 +39,7 @@ int main () {
                 std::cout << "y cordinate: ";
                 std::cin >> yCord;
                 if(yCord <= 0 || yCord > game.getBoardHeight()){
-                    std::cout << "Bad y cordinate, please re-enter.";
+                    std::cout << "Bad y cordinate, please re-enter.\n";
                 }
             }
 

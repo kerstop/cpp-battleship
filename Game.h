@@ -2,6 +2,7 @@
 #define battleship_project_462
 
 #include <vector>
+#include "Tile.h"
 
 namespace Battleship{
 
@@ -9,7 +10,7 @@ namespace Battleship{
     private:
         
         void construct(int x, int y, int numberOfShips, int numberOfGuesses);
-        std::vector<std::vector<int>> board;
+        std::vector<std::vector<Tile>> board;
         int numberOfShips;
         int boardHeight;
         int boardWidth;

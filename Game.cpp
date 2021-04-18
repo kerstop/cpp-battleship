@@ -7,9 +7,12 @@ using namespace Battleship;
 
 
 void Game::construct(int width, int height, int ships, int guesses){
-    std::vector<int> row;
-    row.assign(width, 0);
-    board.assign(height, row);
+    
+    Tile templateTile{false, false};
+    std::vector<Tile> templateRow;
+    
+    templateRow.assign(width, templateTile);
+    board.assign(height, templateRow);
 
     boardWidth = width;
     boardHeight = height;
@@ -51,46 +54,38 @@ void Game::printBoard(){
     for(int y{0}; y < boardHeight; y++){
         std::cout << y+1 << " ";
         for(int x{0}; x < boardWidth; x++){
-            int tile{board[x][y]};
-            switch (tile){
-
-            case 0: //nothing
-                std::cout << "? ";
-                break;
-
-            case 1: //miss
-                std::cout << "# ";
-                break;
-
-            case 2: //ship
-                std::cout << "? ";
-                break;
-
-            case 3: //hit
-                std::cout << "X ";
-                break;
+            Tile *tile = &board[x][y];
             
-            default:
-                std::cout << "! ";
-                break;
+            if(tile->guessed){
+
+                if(tile->ship){
+                    std::cout << "X ";
+                } 
+                else {
+                    std::cout << "# ";
+                }
+
+            } else {
+                std::cout << "? ";
             }
         }
         std::cout << "\n";
     }
 }
 
-void Game::placeShips(int n){
+void Game::placeShips(int shipsToPlace){
+
     //make sure that the extra ships can fit
-    if( numberOfShips + n < boardHeight * boardWidth){
+    if( numberOfShips + shipsToPlace < boardHeight * boardWidth){
         std::srand(time(nullptr));
         
-        while( n > 0 ) {
+        while( shipsToPlace > 0 ) {
             int x = std::rand() % boardWidth;
             int y = std::rand() % boardHeight;
-            if (board[x][y] == 0)
+            if (!board[x][y].ship)
             {
-                board[x][y] = 2;
-                n--;
+                board[x][y].ship = true;
+                shipsToPlace--;
                 numberOfShips++;
             }
             
@@ -115,34 +110,24 @@ int Game::getBoardWidth(){
 }
 
 int Game::makeGuess(int x, int y){
-    numberOfGuesses--;
-    int *tile = &board[x-1][y-1];
-    switch(*tile){
-        
-        case 0: //empty space
-            std::cout << "Miss\n";
-            (*tile)++;
-            return 0;
 
-        case 1: //missed shot space
-            std::cout << "You already guessed that spot?\n";
-            numberOfGuesses++;
-            return -1;
+    Tile *tile = &board[x-1][y-1];
+    
+    if(tile->guessed){
+        std::cout << "You already guessed that spot\n";
+        return -1;
+    }
 
-        case 2: //un-hit ship space
-            std::cout << "Hit!\n";
-            (*tile)++;
-            numberOfShips--;
-            return 1;
-
-        case 3: //hit ship
-            std::cout << "You already guessed that spot?\n";
-            numberOfGuesses++;
-            return -1;
-
-        default:
-            std::cout << "ERROR\n";
-            return -5;
+    if(tile->ship){
+        std::cout << "Hit!\n";
+        tile->guessed = true;
+        numberOfGuesses--;
+        return 1;
+    } else {
+        std::cout << "Miss\n";
+        tile->guessed = true;
+        numberOfGuesses--;
+        return 0;
     }
 }
 
