@@ -1,4 +1,5 @@
-#include "Game.h"
+#include "Game.hpp"
+#include "Tile.hpp"
 #include <vector>
 #include <iostream>
 

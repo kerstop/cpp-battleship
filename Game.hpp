@@ -2,7 +2,7 @@
 #define battleship_project_462
 
 #include <vector>
-#include "Tile.h"
+#include "Tile.hpp"
 
 namespace Battleship{
 
@@ -25,11 +25,11 @@ namespace Battleship{
         int getNumberOfShips();
         int getBoardWidth();
         int getBoardHeight();
+        bool canMakeGuess();
 
         void printBoard();
         void placeShips(int n);
         int makeGuess(int x, int y);
-        bool canMakeGuess();
 
     };
 }
