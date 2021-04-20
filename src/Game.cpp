@@ -9,7 +9,7 @@ using namespace Battleship;
 
 void Game::construct(int width, int height, int ships, int guesses){
     
-    Tile templateTile{false, false};
+    Tile templateTile{false, nullptr};
     std::vector<Tile> templateRow;
     
     templateRow.assign(width, templateTile);

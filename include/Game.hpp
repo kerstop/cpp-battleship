@@ -11,6 +11,7 @@ namespace Battleship{
         
         void construct(int x, int y, int numberOfShips, int numberOfGuesses);
         std::vector<std::vector<Tile>> board;
+        std::vector<Ship> ships;
         int numberOfShips;
         int boardHeight;
         int boardWidth;
