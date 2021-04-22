@@ -5,10 +5,9 @@
 
 using namespace Battleship;
 
+Game::Game(int width, int height) {
 
 
-void Game::construct(int width, int height, int ships, int guesses){
-    
     Tile templateTile{false, nullptr};
     std::vector<Tile> templateRow;
     
@@ -17,29 +16,8 @@ void Game::construct(int width, int height, int ships, int guesses){
 
     boardWidth = width;
     boardHeight = height;
-
     numberOfShips = 0;
-    placeShips(ships);
-
-    numberOfGuesses = guesses;
-
-}
-
-Game::Game(int width, int height) {
-    
-    int numShips = (width * height) / 8;
-
-    int numGuesses = (width * height) * 0.8;
-
-    construct(width, height, numShips, numGuesses);
-
-}
-
-Game::Game(int width, int height, int number) {
-    
-    int numGuesses = (width * height) * 0.8;
-
-    construct(width, height, number, numGuesses);
+    numberOfGuesses = (width * height) * 0.8;
 
 }
 
@@ -57,6 +35,7 @@ void Game::printBoard(){
         for(int x{0}; x < boardWidth; x++){
             Tile *tile = &board[x][y];
             
+            //choose which character to print
             if(tile->guessed){
 
                 if(tile->ship){
@@ -74,22 +53,86 @@ void Game::printBoard(){
     }
 }
 
-void Game::placeShips(int shipsToPlace){
+void Game::placeShip(int x, int y, int length, bool vertical) throw(int){
+    
+    //check if given values are within the board
+    if(vertical && y + length > boardHeight ) {
+        throw(1);
+    }
+    else if(!vertical && x + length > boardWidth){
+        throw(1);
+    }
 
-    //make sure that the extra ships can fit
-    if( numberOfShips + shipsToPlace < boardHeight * boardWidth){
-        std::srand(time(nullptr));
+    //check if spot overlaps with another ship
+    Tile **potentialSpot = new Tile *[length];
+    for(int i = 0; i < length; i ++){
+        //if the ship should be placed vertically increment vertically
+        if(vertical && !board[x][y+i].ship){
+            potentialSpot[i] = &board[x][y+i];
+        }
+        //if the ship should be placed horizantally increment horizantally
+        else if ( !vertical && !board[x+i][y].ship){
+            potentialSpot[i] = &board[x+i][y];
+        }
+        //otherwise a ship was detected, clean up and exit
+        else {
+            delete[] potentialSpot;
+            throw(1);
+        }
+    }
+
+    //if neither then place ships on the board
+    ships.push_back(Ship{length});
+    Ship *currentShip = &ships.back();
+    for(int i = 0; i < length; i ++){
+        //if the ship should be placed vertically increment vertically
+        int currentXPos;
+        int currentYPos;
+        if(vertical){
+            currentXPos = x;
+            currentYPos = y+i;
+        }
+
+        //if the ship should be placed horizantally increment horizantally
+        else if (!vertical){
+            currentXPos = x+i;
+            currentYPos = y;
+        }
+
+        //tell ship struct where it's body parts are
+        currentShip->body.push_back(std::pair<int,int>(currentXPos,currentYPos));
+        //Put pointers to the ship on the tiles it occupies
+        board[currentXPos][currentYPos].ship = currentShip;
+
+    }
+    //increment the number of ships in the game
+    numberOfShips++;
+}
+
+void Game::placeShipsAtRandom(int shipsToPlace, int shipLength){
+
+    std::srand(time(nullptr));
+
+    int errorCounter{0};
+    while( shipsToPlace > 0 ) {
+        // pick random spot and direction
+        int x = std::rand() % boardWidth;
+        int y = std::rand() % boardHeight;
+        bool vertical = std::rand() % 2 == 0;
         
-        while( shipsToPlace > 0 ) {
-            int x = std::rand() % boardWidth;
-            int y = std::rand() % boardHeight;
-            if (!board[x][y].ship)
-            {
-                board[x][y].ship = true;
-                shipsToPlace--;
-                numberOfShips++;
+        try {
+            placeShip(x, y, shipLength, vertical);
+            shipsToPlace--;
+        }
+        catch(int e){
+            std::cerr << "Ship placement exception\n";
+            errorCounter++;
+            if(errorCounter > 1000){
+                std::cerr << "Game::placeShipsAtRandom was unable to find" << 
+                " an available spot for ship of length " << shipLength <<
+                "\nAborting ship placement\n";
+                return;
             }
-            
         }
     }
 };

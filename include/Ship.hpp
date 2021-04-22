@@ -6,8 +6,8 @@
 
 namespace Battleship{
     struct Ship {
-        std::vector<std::pair<int,int>> body;
         int health;
+        std::vector<std::pair<int,int>> body;
     };
 }
 

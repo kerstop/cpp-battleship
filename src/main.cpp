@@ -8,6 +8,7 @@ int main () {
 //initialize game
 
     Game game(6, 6);
+    game.placeShipsAtRandom(3, 3);
     
 //main game loop
 

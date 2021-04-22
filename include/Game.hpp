@@ -3,13 +3,13 @@
 
 #include <vector>
 #include "Tile.hpp"
+#include <exception>
 
 namespace Battleship{
 
     class Game {
     private:
         
-        void construct(int x, int y, int numberOfShips, int numberOfGuesses);
         std::vector<std::vector<Tile>> board;
         std::vector<Ship> ships;
         int numberOfShips;
@@ -20,7 +20,6 @@ namespace Battleship{
     public:
 
         Game(int x, int y);
-        Game(int x, int y, int numberOfShips);
 
         int getNumberOfGuesses();
         int getNumberOfShips();
@@ -29,7 +28,9 @@ namespace Battleship{
         bool canMakeGuess();
 
         void printBoard();
-        void placeShips(int n);
+
+        void placeShip(int x, int y, int length, bool vertical) throw(int);
+        void placeShipsAtRandom(int n, int length);
         int makeGuess(int x, int y);
 
     };
