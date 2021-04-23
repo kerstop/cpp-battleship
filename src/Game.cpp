@@ -16,7 +16,6 @@ Game::Game(int width, int height) {
 
     boardWidth = width;
     boardHeight = height;
-    numberOfShips = 0;
     numberOfGuesses = (width * height) * 0.8;
 
 }
@@ -142,8 +141,6 @@ void Game::placeShip(int x, int y, int length, bool vertical) throw(int){
         board[currentXPos][currentYPos].ship = currentShip;
 
     }
-    //increment the number of ships in the game
-    numberOfShips++;
 }
 
 void Game::placeShipsAtRandom(int shipsToPlace, int shipLength){
@@ -175,7 +172,13 @@ void Game::placeShipsAtRandom(int shipsToPlace, int shipLength){
 };
 
 int Game::getNumberOfShips(){
-    return numberOfShips;
+    int total{0};
+    for(const auto &i: ships ){
+        if(i.health > 0){
+            total++;
+        }
+    }
+    return total;
 }
 
 int Game::getNumberOfGuesses(){
@@ -202,8 +205,15 @@ int Game::makeGuess(int x, int y){
     if(tile->ship){
         std::cout << "Hit!\n";
         tile->guessed = true;
+        tile->ship->health--;
         numberOfGuesses--;
+
+        if(tile->ship->health == 0){
+            std::cout << "You sunk a battleship!\n";
+        }
+
         return 1;
+
     } else {
         std::cout << "Miss\n";
         tile->guessed = true;

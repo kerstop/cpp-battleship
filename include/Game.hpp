@@ -4,6 +4,7 @@
 #include <vector>
 #include "Tile.hpp"
 #include <exception>
+#include <list>
 
 namespace Battleship{
 
@@ -11,8 +12,7 @@ namespace Battleship{
     private:
         
         std::vector<std::vector<Tile>> board;
-        std::vector<Ship> ships;
-        int numberOfShips;
+        std::list<Ship> ships;
         int boardHeight;
         int boardWidth;
         int numberOfGuesses;
