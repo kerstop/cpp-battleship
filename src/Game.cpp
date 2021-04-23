@@ -53,6 +53,43 @@ void Game::printBoard(){
     }
 }
 
+void Game::printBoardDebug(){
+    //scale across the top
+    std::cout << "+ ";
+    for(int n{0}; n < boardWidth; n++){
+        std::cout << n+1 << " ";
+    }
+    std::cout << std::endl;
+
+    //print the body of the board
+    for(int y{0}; y < boardHeight; y++){
+        std::cout << y+1 << " ";
+        for(int x{0}; x < boardWidth; x++){
+            Tile *tile = &board[x][y];
+            
+            //choose which character to print
+            if(tile->guessed){
+
+                if(tile->ship){
+                    std::cout << "X ";
+                } 
+                else {
+                    std::cout << "# ";
+                }
+
+            } else {
+                if(tile->ship){
+                    std::cout << "^ ";
+                }
+                else {
+                    std::cout << "? ";
+                }
+            }
+        }
+        std::cout << "\n";
+    }
+}
+
 void Game::placeShip(int x, int y, int length, bool vertical) throw(int){
     
     //check if given values are within the board

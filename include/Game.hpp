@@ -28,6 +28,7 @@ namespace Battleship{
         bool canMakeGuess();
 
         void printBoard();
+        void printBoardDebug();
 
         void placeShip(int x, int y, int length, bool vertical) throw(int);
         void placeShipsAtRandom(int n, int length);
