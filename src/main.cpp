@@ -3,6 +3,8 @@
 
 using namespace Battleship;
 
+constexpr bool debug = false;
+
 int main () {
 
 //initialize game
@@ -20,7 +22,12 @@ int main () {
             // printing out game information
             std::cout << "Ships: " << game.getNumberOfShips() << std::endl;
             std::cout << "Guesses: " << game.getNumberOfGuesses() << std::endl;
-            game.printBoard();
+            if(debug){
+                game.printBoardDebug();
+            }
+            else {
+                game.printBoard();
+            }
 
             // ask player where to shoot
             std::cout << "Where would you like to fire?\n";
