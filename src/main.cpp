@@ -1,78 +1,64 @@
 #include "Game.hpp"
 #include <iostream>
 #include <utility>
+#include <string>
 
 using namespace Battleship;
+using std::string;
 
 constexpr bool debug = false;
 
-std::pair<int,int> getGuess(Game*);
+string combineStringsSideBySide(string sOne, string sTwo);
 
 int main () {
 
 //initialize game
 
-    Game game(6, 6);
-    game.placeShipsAtRandom(3, 3);
-    
+    Game game(8,8);
+    game.playerOne.placeShipsAtRandom(3,3);
+    game.playerTwo.placeShipsAtRandom(3,3);
+
 //main game loop
 
-    bool playing {true};
-    while(playing){
-        // main game loop
-        while(game.canMakeGuess() && game.getNumberOfShips() > 0){
-            
-            // printing out game information
-            std::cout << "Ships: " << game.getNumberOfShips() << std::endl;
-            std::cout << "Guesses: " << game.getNumberOfGuesses() << std::endl;
-            if(debug){
-                game.printBoardDebug();
-            }
-            else {
-                game.printBoard();
-            }
+    
+    
 
-            // ask player where to shoot
-            std::cout << "Where would you like to fire?\n";
-            
-            auto guess = getGuess(&game);
+    
 
-            game.makeGuess(guess.first, guess.second);
-
-            std::cout << std::endl;
-
-        }//main game loop ends
-        if(game.getNumberOfShips() == 0){
-            std::cout << "Congragulations you win!\n";
-        }
-        else if(game.getNumberOfGuesses() == 0){
-            std::cout << "Sorry, you lost\n";
-        }
-        playing = false;
-    }
-
-    return 0;
+    
 }
 
-std::pair<int,int> getGuess(Game *game){
-    int xCord{0};
-    // while xCord is outside of the game bounds
-    while(xCord <= 0 || xCord > game->getBoardWidth()){
-        std::cout << "x cordinate: ";
-        std::cin >> xCord;
-        if (xCord <= 0 || xCord > game->getBoardWidth()){
-            std::cout << "Bad x cordinate, please re-enter.\n";
-        }
-    }
+string combineStringsSideBySide(string sOne, string sTwo){
 
-    int yCord{0};
-    while(yCord <= 0 || yCord > game->getBoardHeight()){
-        std::cout << "y cordinate: ";
-        std::cin >> yCord;
-        if(yCord <= 0 || yCord > game->getBoardHeight()){
-            std::cout << "Bad y cordinate, please re-enter.\n";
-        }
-    }
+    string sOut = "";
 
-    return std::pair<int,int>(xCord,yCord);
+    auto oneWalker = sOne.begin();
+    auto twoWalker = sTwo.begin();
+
+    while (oneWalker != sOne.end() && twoWalker != sTwo.end()){
+        while(oneWalker != sOne.end()){
+            if(*oneWalker != '\n'){
+                sOut.push_back(*oneWalker);
+                oneWalker++;
+            }
+            else {
+                sOut.push_back(' ');
+                oneWalker++;
+                break;
+            }
+        }
+        while (twoWalker != sTwo.end()){
+            
+            sOut.push_back(*twoWalker);
+            
+            if (*twoWalker == '\n'){
+                twoWalker++;
+                break;
+            }
+            twoWalker++;
+        }
+        
+    }
+    return sOut;
+
 }
